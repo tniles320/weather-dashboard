@@ -1,0 +1,73 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+}
+
+h1 {
+    background-color: rgb(59, 59, 59);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+}
+
+.search-list {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    width: 30%;
+    border: solid 1px;
+}
+
+#search-input {
+    position: relative;
+    float: left;
+    width: 80%;
+}
+
+#search-button {
+    position: relative;
+    float: left;
+    width: 20%;
+}
+
+#city-list {
+    display: flex;
+    flex-direction: column;
+}
+
+#weather-container {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-end;
+    width: 70%;
+}
+
+#current-weather {
+    border: solid 1px;
+    height: 300px;
+}
+
+#current-city {
+    display: flex;
+    flex-direction: row;
+
+}
+
+#current-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.weather-icon {
+    height: 4rem;
+}
+
+#future-forecast {
+    border: solid 1px;
+    height: 200px;
+}
