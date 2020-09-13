@@ -71,3 +71,14 @@ h1 {
     border: solid 1px;
     height: 200px;
 }
+
+#future-weather {
+    display: flex;
+    justify-content: space-between;
+    border: solid 1px;
+}
+
+.forecast-container {
+    width: 120px;
+    border: solid 1px;
+}

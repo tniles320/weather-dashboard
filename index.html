@@ -29,6 +29,7 @@
       </div>
       <div id="future-forecast">
           <h2>5-Day Forecast:</h2>
+          <div id="future-weather"></div>
       </div>
     </div>
   </main>
@@ -88,6 +89,8 @@
     $("#search-button").on("click", function() {
         // event.preventDefault();
 
+        $("#future-weather").html("");
+        
         var cityName = $("#search-input").val().trim();
 
         getLocalCities(cityName);
@@ -109,7 +112,7 @@
     $(".cities").on("click", function(event) {
         event.preventDefault();
 
-        console.log("hello");
+        $("#future-weather").html("");
 
         var cityName = $(this).attr("value");
         getCityInfo(cityName);
@@ -189,27 +192,69 @@
         .then(function(response) {
             console.log(response);
 
+            var forecastDayOne = moment().add(1,"days").format("L");
+            var forecastDayTwo = moment().add(2,"days").format("L");
+            var forecastDayThree = moment().add(3,"days").format("L");
+            var forecastDayFour = moment().add(4,"days").format("L");
+            var forecastDayFive = moment().add(5,"days").format("L");
+
             // function to display forecast info
+            function displayForecast() {
+
+                // appends container for days forecast
+                var forecastDiv = $("<div>");
+                forecastDiv.addClass("forecast-container");
+                forecastDiv.addClass("" + j);
+                $("#future-weather").append(forecastDiv);
+
+                // appends div for date
+                var forecastDay = $("<div>");
+                forecastDay.addClass("forecast-day" + j);
+                $("." +j).append(forecastDay);
+
+                // appends weather icon
+                var forecastImage = $("<img>")
+                forecastImage.attr("src", forecastIcon);
+                forecastImage.addClass("weather-icon");
+                $("." + j).append(forecastImage);
+
+                // appends temp and humidity
+                var bottomDiv = $("<div>");
+                var forecastTempDisplay = "Temp: " + forecastTemp.toFixed(2) + " °F";
+                var forecastHumidityDisplay = "Humidity: " + forecastHumidity + "%";
+                bottomDiv.html(forecastTempDisplay + "<br>" + forecastHumidityDisplay);
+                $("." + j).append(bottomDiv);
+
+            }
 
             // loop to find the 5 day forecast info
             for(var j = 0; j < response.list.length; j++) {
 
                 var matchDay = response.list[j].dt_txt;
+                var forecastTemp = (response.list[j].main.temp_max - 273.15) * 9/5 + 32;
+                var forecastHumidity = response.list[j].main.humidity;
+                var forecastIcon = "https://openweathermap.org/img/wn/" + response.list[j].weather[0].icon + "@2x.png";
 
+                // adds content for each day based off of info at 3:00pm
                 if(matchDay == forecastOne) {
-                    console.log(response.list[j]);
+                    displayForecast();
+                    $(".forecast-day" + j).append(forecastDayOne);
                 }
                 if(matchDay == forecastTwo) {
-                    console.log(response.list[j]);
+                    displayForecast();
+                    $(".forecast-day" + j).append(forecastDayTwo);
                 }
                 if(matchDay == forecastThree) {
-                    console.log(response.list[j]);
+                    displayForecast();
+                    $(".forecast-day" + j).append(forecastDayThree);
                 }
                 if(matchDay == forecastFour) {
-                    console.log(response.list[j]);
+                    displayForecast();
+                    $(".forecast-day" + j).append(forecastDayFour);
                 }
                 if(matchDay == forecastFive) {
-                    console.log(response.list[j]);
+                    displayForecast();
+                    $(".forecast-day" + j).append(forecastDayFive);
                 }
             }
         })
