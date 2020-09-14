@@ -37,11 +37,11 @@
 <script>
 
     var currentDay = moment().format("(L)");
-    var forecastOne = moment().add(1,"days").format().slice(0, 10) + " 15:00:00";
-    var forecastTwo = moment().add(2,"days").format().slice(0, 10) + " 15:00:00";
-    var forecastThree = moment().add(3,"days").format().slice(0, 10) + " 15:00:00";
-    var forecastFour = moment().add(4,"days").format().slice(0, 10) + " 15:00:00";
-    var forecastFive = moment().add(5,"days").format().slice(0, 10) + " 15:00:00";
+    var forecastOne = moment().add(1,"days").format().slice(0, 10) + " 21:00:00";
+    var forecastTwo = moment().add(2,"days").format().slice(0, 10) + " 21:00:00";
+    var forecastThree = moment().add(3,"days").format().slice(0, 10) + " 21:00:00";
+    var forecastFour = moment().add(4,"days").format().slice(0, 10) + " 21:00:00";
+    var forecastFive = moment().add(5,"days").format().slice(0, 10) + " 21:00:00";
     
 
     var cities = [];
@@ -84,13 +84,8 @@
 
     }
 
-    // search button on click event
-    // click event prevents city button click event from working
-    $("#search-button").on("click", function() {
-        // event.preventDefault();
+    function inputFunction() {
 
-        $("#future-weather").html("");
-        
         var cityName = $("#search-input").val().trim();
 
         getLocalCities(cityName);
@@ -105,14 +100,25 @@
         } else {
             addCities(cities);
         }
+        // location.reload();
+        $("#search-input").val("");
+    }
+
+    // search button on click event
+    // click event prevents city button click event from working, only works if page is reloaded
+    $("#search-button").on("click", function() {
+        inputFunction();
     })
 
+    $("#search-input").on("keypress", function(event) {
+        if(event.which === 13) {
+            event.preventDefault();
+            inputFunction();
+        }
+    })
 
     // click event that displays weather info
-    $(".cities").on("click", function(event) {
-        event.preventDefault();
-
-        $("#future-weather").html("");
+    $(".cities").on("click", function() {
 
         var cityName = $(this).attr("value");
         getCityInfo(cityName);
@@ -122,6 +128,7 @@
     function getCityInfo(cityName) {
         $("#current-city").html("");
         $("#current-list").html("");
+        $("#future-weather").html("");
         
         // current day weather
         var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=21ffb69761330cb50c25f45c59fb7cb9";
@@ -140,8 +147,6 @@
 
             newImage.attr("src", icon);
             newImage.addClass("weather-icon");
-
-
 
             var newHead = $("<h2>")
 
@@ -190,7 +195,6 @@
         })
 
         .then(function(response) {
-            console.log(response);
 
             var forecastDayOne = moment().add(1,"days").format("L");
             var forecastDayTwo = moment().add(2,"days").format("L");
@@ -231,7 +235,7 @@
             for(var j = 0; j < response.list.length; j++) {
 
                 var matchDay = response.list[j].dt_txt;
-                var forecastTemp = (response.list[j].main.temp_max - 273.15) * 9/5 + 32;
+                var forecastTemp = (response.list[j].main.temp - 273.15) * 9/5 + 32;
                 var forecastHumidity = response.list[j].main.humidity;
                 var forecastIcon = "https://openweathermap.org/img/wn/" + response.list[j].weather[0].icon + "@2x.png";
 

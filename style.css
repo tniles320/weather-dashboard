@@ -2,11 +2,6 @@
     box-sizing: border-box;
 }
 
-body {
-    border: solid 1px;
-    border-radius: 5px;
-}
-
 main {
     display: flex;
     flex-direction: row;
@@ -63,15 +58,14 @@ label {
     height: 400px;
     width: 100%;
     margin: auto;
-    border: solid 1px;
     border-radius: 5px;
 }
 
 .cities {
     background-color: white;
     height: 10%;
-    border: 0;
-    border-bottom: solid 1px;
+    border-radius: 5px;
+    border: solid .5px;
     font-size: 1.2rem;
     font-weight: bold;
 }
@@ -123,7 +117,6 @@ label {
 
 .forecast-container {
     width: 120px;
-    border: solid 1px;
     padding: 5px;
     background-color: rgb(62, 62, 233);
     color: rgb(233, 231, 231);
@@ -133,13 +126,8 @@ label {
 
 @media only screen and (max-width: 1000px) {
 
-    #future-weather {
-        flex-wrap: wrap;
-        justify-content: space-evenly;
-    }
-
-    body {
-        height: 900px;
+    .search-list {
+        padding: 20px 2px 0 2px;
     }
 
     #search-row {
@@ -149,22 +137,28 @@ label {
     #search-button {
         font-size: .6rem;
     }
+
+    #future-weather {
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+
+    .forecast-container {
+        margin-bottom: 20px;
+    }
+
   }
+
 
 @media only screen and (max-width: 450px) {
 
-    body {
-        height: 1200px;
-    }
-
     label {
-        margin-left: -19px;
         font-size: .75rem;
     }
 
     #search-row {
-        margin-left: -19px;
-        width: 100px;
+        margin: auto;
+        width: 95%;
     }
 
     #search-input {
@@ -178,8 +172,8 @@ label {
     }
 
     #city-list {
-        margin-left: -19px;
-        width: 100px;
+        margin: auto;
+        width: 100%;
     }
 
     .cities {
@@ -192,5 +186,9 @@ label {
 
     #current-city {
         margin-left: -15px;
+        font-size: 14px;
+    }
+    #current-list {
+        font-size: 12px;
     }
   }
