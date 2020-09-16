@@ -60,6 +60,20 @@
 
     resetLocalCities();
 
+        // function to add buttons to city list
+        function addCities(cities) {
+        for(var i = 0; i < cities.length; i++) {
+
+            var newButton = $("<button>");
+            newButton.addClass("cities");
+            newButton.attr("value", cities[i]);
+            newButton.text(cities[i]);
+            $("#city-list").prepend(newButton);
+        }
+
+    }
+    console.log(cities);
+
     // pushes entered city to array and adds it to local storage
     function getLocalCities(cityName) {
         if($("#search-input").val() === "") {
@@ -71,37 +85,24 @@
             }
     }
 
-    // function to add buttons to city list
-    function addCities(cities) {
-        for(var i = 0; i < cities.length; i++) {
-
-            var newButton = $("<button>");
-            newButton.addClass("cities");
-            newButton.attr("value", cities[i]);
-            newButton.text(cities[i]);
-            $("#city-list").prepend(newButton);
-        }
-
-    }
-
     function inputFunction() {
+        if($("#search-input").val() === "") {
+                return;
+            } else {
+            var cityName = $("#search-input").val().trim();
+            getLocalCities(cityName);
+            getCityInfo(cityName);
 
-        var cityName = $("#search-input").val().trim();
-
-        getLocalCities(cityName);
-
-        getCityInfo(cityName);
-
-        // sets a max number for the array length
-        if(cities.length > 10) {
-            cities.shift();
-            localStorage.setItem("cities", cities);
-            addCities(cities);
-        } else {
-            addCities(cities);
+            // sets a max number for the array length
+            if(cities.length > 10) {
+                cities.shift();
+                localStorage.setItem("cities", cities);
+                addCities(cities);
+            } else {
+                addCities(cities);
+            }
+            $("#search-input").val("");
         }
-        // location.reload();
-        $("#search-input").val("");
     }
 
     // search button on click event
@@ -141,30 +142,62 @@
         .then(function(response) {
 
             var city = response.name;
-            
-            var icon = "https://openweathermap.org/img/wn/" + response.weather[0].icon + "@2x.png";
-            var newImage = $("<img>")
 
+            // sets icon for current weather
+            var iconCode = response.weather[0].icon
+            var icon = "https://openweathermap.org/img/wn/" + iconCode + "@2x.png";
+            var newImage = $("<img>")
             newImage.attr("src", icon);
             newImage.addClass("weather-icon");
 
+            // sets city for current weather
             var newHead = $("<h2>")
-
-            newHead.text(response.name + " " + currentDay);
-            var oldHead = response.name + " " + currentDay;
+            newHead.text(city + " " + currentDay);
+            var oldHead = city + " " + currentDay;
             
             $("#current-city").append(newHead);
             $("#current-city").append(newImage);
+            
+            // sets background image
+            var cloudy = ["02d", "02n", "03d", "03n", "04d", "04n"]
+            var rainy = ["09d", "09n", "10d", "10n", "11d", "11n"]
 
+            if(iconCode == "01d") {
+                $("body").css({"background-image": "url('images/sunny.jpg')"});
+            }
+            if(iconCode === "01n") {
+                $("body").css({"background-image": "url('images/night.jpg')"});
+                $("#current-weather").css({"color": "white"});
+                $("#future-forecast").css({"color": "white"});
+            }
+            for(var k = 0; k < cloudy.length; k++) {
+                if(iconCode === cloudy[k]) {
+                    $("body").css({"background-image": "url('images/cloudy.jpg')"});
+                }
+            }
+            for(var l = 0; l < rainy.length; l++) {
+                if(iconCode === rainy[l]) {
+                    $("body").css({"background-image": "url('images/rainy.jpg')"});
+                }
+            }
+            if(iconCode === "13d" || iconCode === "13n") {
+                $("body").css({"background-image": "url('images/snowy.jpg')"});
+            }
+            if(iconCode === "50d" || iconCode === "50n") {
+                $("body").css({"background-image": "url('images/foggy.jpg')"});
+            }
+
+            // sets variable for api data
             var temp = (response.main.temp - 273.15) * 9/5 + 32;
             var humidity = response.main.humidity;
             var windSpeed = response.wind.speed * 2.237;
 
+            // variables for latitude and longitude
             var lat = response.coord.lat;
             var lon = response.coord.lon;
-
             var getUV = "https://api.openweathermap.org/data/2.5/uvi?appid=21ffb69761330cb50c25f45c59fb7cb9&lat=" + lat + "&lon=" + lon;
 
+            // api call for uv index
             $.ajax({
                 url: getUV,
                 method: "GET"
@@ -172,17 +205,32 @@
 
             .then(function(response) {
 
+                
                 var uvIndex = response.value;
-
+                
+                // variables for div with weather data
                 var newDiv = $("<div>");
                 var tempDisplay = "Temperature: " + temp.toFixed(2) + " °F";
                 var humidityDisplay = "Humidity: " + humidity + "%";
                 var windDisplay = "Wind Speed: " + windSpeed.toFixed(1) + " MPH";
                 var uvDisplay = "UV Index: " + uvIndex;
 
-                newDiv.html(tempDisplay + "<br>" + humidityDisplay + "<br>" + windDisplay + "<br>" + uvDisplay);
+                newDiv.html(tempDisplay + "<br>" + humidityDisplay + "<br>" + windDisplay + "<br>" +  "<div id='uv'>" + uvDisplay + "</div>");
 
+
+                // appends weather data
                 $("#current-list").append(newDiv);
+
+                // changes uv index color
+                if(uvIndex > 7) {
+                    $("#uv").css({"background-color": "rgb(252, 49, 49, 0.8)"});
+                } else if(uvIndex > 5) {
+                    $("#uv").css({"background-color": "rgb(255, 115, 0, 0.8)"});
+                } else if(uvIndex > 2) {
+                    $("#uv").css({"background-color": "rgb(236, 236, 53, 0.8)"});
+                } else {
+                    $("#uv").css({"background-color": "rgb(0, 165, 0, 0.8)"});
+                }
             })
         })
 

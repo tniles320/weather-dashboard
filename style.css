@@ -2,13 +2,26 @@
     box-sizing: border-box;
 }
 
+html {
+    height: 1250px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 main {
     display: flex;
     flex-direction: row;
 }
 
 h1 {
-    background-color: rgb(10, 10, 92);
+    background-color: rgb(10, 10, 92, 0.7);
     color: white;
     text-align: center;
     padding: 20px;
@@ -25,8 +38,9 @@ label {
     align-content: flex-start;
     width: 30%;
     border-radius: 5px;
-    background-color: lightgray;
+    background-color: rgb(211, 211, 211, 0.7);
     padding: 20px;
+    margin-top: 5px;
 }
 
 #search-row {
@@ -81,11 +95,9 @@ label {
 }
 
 #current-weather {
-    border: solid 1px;
     height: 300px;
     padding: 30px 30px 0 30px;
     margin: 20px 20px 0 20px;
-    border-radius: 5px;
 }
 
 #current-city {
@@ -104,6 +116,13 @@ label {
     height: 4rem;
 }
 
+#uv {
+    border-radius: 5px;
+    width: 112px;
+    padding-left: 4px;
+    box-shadow: 0 0 3px 1px;
+}
+
 #future-forecast {
     height: 200px;
     padding: 0 30px 0 30px;
@@ -118,10 +137,11 @@ label {
 .forecast-container {
     width: 120px;
     padding: 5px;
-    background-color: rgb(62, 62, 233);
+    background-color: rgb(62, 62, 233, 0.8);
     color: rgb(233, 231, 231);
     border-radius: 5px;
     line-height: 1.2rem;
+    box-shadow: black 0 0 5px 1px;
 }
 
 @media only screen and (max-width: 1000px) {
