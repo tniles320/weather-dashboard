@@ -5,6 +5,11 @@ var forecastThree = moment().add(3,"days").format().slice(0, 10) + " 18:00:00";
 var forecastFour = moment().add(4,"days").format().slice(0, 10) + " 18:00:00";
 var forecastFive = moment().add(5,"days").format().slice(0, 10) + " 18:00:00";
 
+var forecastDayOne = moment().add(1,"days").format("L");
+var forecastDayTwo = moment().add(2,"days").format("L");
+var forecastDayThree = moment().add(3,"days").format("L");
+var forecastDayFour = moment().add(4,"days").format("L");
+var forecastDayFive = moment().add(5,"days").format("L");
 
 var cities = [];
 
@@ -21,7 +26,7 @@ function resetLocalCities() {
 }
 
 
-    // function to add buttons to city list
+// function to add buttons to city list
 function addCities(cities) {
 for(var i = 0; i < cities.length; i++) {
 
@@ -85,6 +90,35 @@ function localWeather(position) {
         getCityInfo(cityName);
 
     })
+
+}
+
+// function to display forecast info
+function displayForecast(forecastTemp, forecastHumidity, forecastIcon, j) {
+
+    // appends container for days forecast
+    var forecastDiv = $("<div>");
+    forecastDiv.addClass("forecast-container");
+    forecastDiv.addClass("" + j);
+    $("#future-weather").append(forecastDiv);
+
+    // appends div for date
+    var forecastDay = $("<div>");
+    forecastDay.addClass("forecast-day" + j);
+    $("." +j).append(forecastDay);
+
+    // appends weather icon
+    var forecastImage = $("<img>")
+    forecastImage.attr("src", forecastIcon);
+    forecastImage.addClass("weather-icon");
+    $("." + j).append(forecastImage);
+
+    // appends temp and humidity
+    var bottomDiv = $("<div>");
+    var forecastTempDisplay = "Temp: " + forecastTemp.toFixed(2) + " °F";
+    var forecastHumidityDisplay = "Humidity: " + forecastHumidity + "%";
+    bottomDiv.html(forecastTempDisplay + "<br>" + forecastHumidityDisplay);
+    $("." + j).append(bottomDiv);
 
 }
 
@@ -187,7 +221,6 @@ function getCityInfo(cityName) {
 
         .then(function(response) {
 
-            
             var uvIndex = response.value;
             
             // variables for div with weather data
@@ -198,7 +231,6 @@ function getCityInfo(cityName) {
             var uvDisplay = "UV Index: " + uvIndex;
 
             newDiv.html(tempDisplay + "<br>" + humidityDisplay + "<br>" + windDisplay + "<br>" +  "<div id='uv'>" + uvDisplay + "</div>");
-
 
             // appends weather data
             $("#current-list").append(newDiv);
@@ -226,41 +258,6 @@ function getCityInfo(cityName) {
 
     .then(function(response) {
 
-        var forecastDayOne = moment().add(1,"days").format("L");
-        var forecastDayTwo = moment().add(2,"days").format("L");
-        var forecastDayThree = moment().add(3,"days").format("L");
-        var forecastDayFour = moment().add(4,"days").format("L");
-        var forecastDayFive = moment().add(5,"days").format("L");
-
-        // function to display forecast info
-        function displayForecast() {
-
-            // appends container for days forecast
-            var forecastDiv = $("<div>");
-            forecastDiv.addClass("forecast-container");
-            forecastDiv.addClass("" + j);
-            $("#future-weather").append(forecastDiv);
-
-            // appends div for date
-            var forecastDay = $("<div>");
-            forecastDay.addClass("forecast-day" + j);
-            $("." +j).append(forecastDay);
-
-            // appends weather icon
-            var forecastImage = $("<img>")
-            forecastImage.attr("src", forecastIcon);
-            forecastImage.addClass("weather-icon");
-            $("." + j).append(forecastImage);
-
-            // appends temp and humidity
-            var bottomDiv = $("<div>");
-            var forecastTempDisplay = "Temp: " + forecastTemp.toFixed(2) + " °F";
-            var forecastHumidityDisplay = "Humidity: " + forecastHumidity + "%";
-            bottomDiv.html(forecastTempDisplay + "<br>" + forecastHumidityDisplay);
-            $("." + j).append(bottomDiv);
-
-        }
-
         // loop to find the 5 day forecast info
         for(var j = 0; j < response.list.length; j++) {
 
@@ -269,25 +266,25 @@ function getCityInfo(cityName) {
             var forecastHumidity = response.list[j].main.humidity;
             var forecastIcon = "https://openweathermap.org/img/wn/" + response.list[j].weather[0].icon + "@2x.png";
 
-            // adds content for each day based off of info at 3:00pm
+            // adds content for each day based off of info at 6:00pm
             if(matchDay == forecastOne) {
-                displayForecast();
+                displayForecast(forecastTemp, forecastHumidity, forecastIcon, j);
                 $(".forecast-day" + j).append(forecastDayOne);
             }
             if(matchDay == forecastTwo) {
-                displayForecast();
+                displayForecast(forecastTemp, forecastHumidity, forecastIcon, j);
                 $(".forecast-day" + j).append(forecastDayTwo);
             }
             if(matchDay == forecastThree) {
-                displayForecast();
+                displayForecast(forecastTemp, forecastHumidity, forecastIcon, j);
                 $(".forecast-day" + j).append(forecastDayThree);
             }
             if(matchDay == forecastFour) {
-                displayForecast();
+                displayForecast(forecastTemp, forecastHumidity, forecastIcon, j);
                 $(".forecast-day" + j).append(forecastDayFour);
             }
             if(matchDay == forecastFive) {
-                displayForecast();
+                displayForecast(forecastTemp, forecastHumidity, forecastIcon, j);
                 $(".forecast-day" + j).append(forecastDayFive);
             }
         }
